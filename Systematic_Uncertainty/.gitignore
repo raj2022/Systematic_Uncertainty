@@ -1,0 +1,22 @@
+# Virtual environment
+.systematic_uncertainty_env/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+
+# Environment variables / secrets
+.env
+
+# Raw pulled data (large, reproducible via pull_arxiv.py — not committed)
+data/raw/
+
+# OS cruft
+.DS_Store
+
+# Editor
+.vscode/
