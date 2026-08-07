@@ -12,11 +12,16 @@ __pycache__/
 # Environment variables / secrets
 .env
 
-# Raw pulled data (large, reproducible via pull_arxiv.py — not committed)
+# Raw pulled data (large, reproducible via pull_arxiv.py -- not committed)
 data/raw/
+
+# Gold-set excerpts (large, regenerable via triage_gold_set.py -- not committed)
+data/gold_set/excerpts/
 
 # OS cruft
 .DS_Store
+**/.DS_Store
 
 # Editor
 .vscode/
+.idea/
