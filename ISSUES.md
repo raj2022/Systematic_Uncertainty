@@ -49,3 +49,11 @@ omitted disclosures but because the checklist doesn't apply to it.
 Added a fourth state, `not_applicable`. See `notes/001_not_applicable_label_state.md`.
 Still open: a consistent rule for what counts as "reports empirical
 results," not just per-paper judgment -- revisit after more labeling.
+
+### pull_arxiv.py's seed wasn't actually reproducible
+"Most recent 500 papers" silently drifts every time the script runs on
+a later date, even with a fixed --seed, because the seed only controls
+sampling *from* the pulled pool, not what that pool contains. Fixed by
+pinning an explicit submission-date window. See
+`notes/002_reproducibility_date_window.md`. Still open: the default
+end date will need a deliberate, logged update eventually.

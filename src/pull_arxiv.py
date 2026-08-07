@@ -5,16 +5,26 @@ Pulls paper metadata from arXiv for the q-fin.ST category (quantitative
 finance, statistical finance). Other q-fin categories (q-fin.CP, q-fin.TR,
 q-fin.PM) are an open item -- deferred for now, see notes/.
 
+Pulls are pinned to an explicit, fixed submission-date window (not
+"most recent N as of whenever this runs"), so re-running this script
+produces the same underlying pool of papers every time, and --seed then
+makes the gold-set sample from that pool reproducible too. Without the
+date pin, "most recent 500" silently drifts every time arXiv publishes
+something new, which defeats the point of a fixed seed -- see
+notes/002_reproducibility_date_window.md.
+
 Writes:
     data/raw/qfin_st_metadata.csv   -- full pulled metadata
     data/gold_set/gold_set_sample.csv -- random sample for hand-labeling
 
 Usage:
     python src/pull_arxiv.py --max-results 500 --gold-size 50
+    python src/pull_arxiv.py --start-date 2024-01-01 --end-date 2026-08-01
 """
 
 import argparse
 import random
+from datetime import datetime
 from pathlib import Path
 
 import arxiv
@@ -23,16 +33,28 @@ from tqdm import tqdm
 
 CATEGORY = "q-fin.ST"
 
+# Fixed default window -- change deliberately, not by re-running on a
+# different day. Any change to these defaults should get a notes/ entry
+# since it changes what the gold set's random sample is drawn from.
+DEFAULT_START_DATE = "2020-01-01"
+DEFAULT_END_DATE = "2026-08-01"
+
 RAW_DIR = Path("data/raw")
 GOLD_DIR = Path("data/gold_set")
 
 
-def fetch_metadata(max_results: int) -> pd.DataFrame:
-    """Query arXiv for the given category, most recent first."""
+def fetch_metadata(max_results: int, start_date: str, end_date: str) -> pd.DataFrame:
+    """Query arXiv for the given category within a fixed submission-date
+    window, most recent first within that window. The date window is
+    what makes this reproducible -- max_results alone is not enough,
+    since "top N most recent" drifts as arXiv publishes new papers."""
     client = arxiv.Client(page_size=100, delay_seconds=3, num_retries=3)
 
+    date_filter = f"submittedDate:[{start_date.replace('-', '')}0000 TO {end_date.replace('-', '')}2359]"
+    query = f"cat:{CATEGORY} AND {date_filter}"
+
     search = arxiv.Search(
-        query=f"cat:{CATEGORY}",
+        query=query,
         max_results=max_results,
         sort_by=arxiv.SortCriterion.SubmittedDate,
         sort_order=arxiv.SortOrder.Descending,
@@ -103,7 +125,20 @@ def main():
                          help="Number of papers to sample for hand-labeling")
     parser.add_argument("--seed", type=int, default=42,
                          help="Random seed for gold set sampling")
+    parser.add_argument("--start-date", type=str, default=DEFAULT_START_DATE,
+                         help="Submission date window start, YYYY-MM-DD. "
+                              "Fixed by default for reproducibility -- see module docstring.")
+    parser.add_argument("--end-date", type=str, default=DEFAULT_END_DATE,
+                         help="Submission date window end, YYYY-MM-DD.")
     args = parser.parse_args()
+
+    # Validate date format early, fail loudly rather than sending a malformed
+    # query to arXiv and getting a confusing empty result back.
+    for label, val in [("--start-date", args.start_date), ("--end-date", args.end_date)]:
+        try:
+            datetime.strptime(val, "%Y-%m-%d")
+        except ValueError:
+            raise SystemExit(f"{label}='{val}' is not a valid YYYY-MM-DD date.")
 
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     GOLD_DIR.mkdir(parents=True, exist_ok=True)
@@ -132,12 +167,19 @@ def main():
             )
         print(f"{gold_path} exists but has no labels yet -- safe to regenerate.")
 
-    print(f"Pulling up to {args.max_results} papers from {CATEGORY}...")
-    df = fetch_metadata(args.max_results)
+    print(f"Pulling up to {args.max_results} papers from {CATEGORY} "
+          f"({args.start_date} to {args.end_date})...")
+    df = fetch_metadata(args.max_results, args.start_date, args.end_date)
 
     raw_path = RAW_DIR / "qfin_st_metadata.csv"
     df.to_csv(raw_path, index=False)
     print(f"Wrote {len(df)} rows to {raw_path}")
+
+    if len(df) < args.max_results:
+        print(f"NOTE: only {len(df)} papers found in this date window, "
+              f"fewer than --max-results={args.max_results}. The pool this "
+              "gold set is sampled from is smaller than requested -- this is "
+              "fine but worth knowing.")
 
     gold_df = build_gold_sample(df, args.gold_size, seed=args.seed)
     gold_df.to_csv(gold_path, index=False)
@@ -146,5 +188,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-    
