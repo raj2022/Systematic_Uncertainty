@@ -112,11 +112,11 @@ Not yet started. Same format as `Track_to_Trade/notes/`: question, method, rejec
 - A short technical note after Phase 3 regardless of outcome.
 
 ## 11. Timeline
-
+ 
 | Phase | Milestone | Status |
 |---|---|---|
-| 1 | Keyword baseline, scored against a hand-labeled gold set | Not started |
-| 2 | Classifier, head-to-head against Phase 1 | Not started, contingent |
+| 1 | Keyword baseline, scored against a hand-labeled gold set | **Complete.** 50-paper gold set (`q-fin.ST`, fixed date window), hand-labeled; 33/50 applicable. Baseline F1 ranged 0.40-0.80 across elements, weakest on multi-window validation and purged/embargoed CV (n=1, effectively unscoreable at this sample size). See `notes/003`-`005`. |
+| 2 | Classifier, head-to-head against Phase 1 | Not started, contingent — Phase 1 gave real signal to beat (see above), so this proceeds |
 | 3 | Synthetic ablation and external replication-failure check | Not started, contingent |
 | 4 | Corpus-scale estimate, stretch | Not scoped |
 
