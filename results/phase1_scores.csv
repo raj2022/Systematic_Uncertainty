@@ -3,4 +3,4 @@ walk_forward_validation,33,0,6,1,7,19,0.857,0.462,0.6
 purged_embargoed_cv,33,0,0,1,1,31,0.0,0.0,
 out_of_sample_cost_modeling,31,2,8,4,0,19,0.667,1.0,0.8
 multiple_testing_correction,33,0,3,1,1,28,0.75,0.75,0.75
-multi_window_validation,33,0,2,3,9,19,0.4,0.182,0.25
+multi_window_validation,33,0,4,5,7,17,0.444,0.364,0.4

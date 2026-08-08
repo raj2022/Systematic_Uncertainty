@@ -1,6 +1,6 @@
 arxiv_id,walk_forward_validation__gold,walk_forward_validation__pred,purged_embargoed_cv__gold,purged_embargoed_cv__pred,out_of_sample_cost_modeling__gold,out_of_sample_cost_modeling__pred,multiple_testing_correction__gold,multiple_testing_correction__pred,multi_window_validation__gold,multi_window_validation__pred
 2510.01203v1,absent,absent,absent,absent,absent,absent,absent,absent,absent,disclosed
-2606.20145v1,absent,absent,absent,absent,absent,absent,absent,absent,absent,absent
+2606.20145v1,absent,absent,absent,absent,absent,absent,absent,absent,absent,disclosed
 2607.25189v1,disclosed,absent,absent,absent,absent,absent,absent,absent,absent,absent
 2507.15437v3,disclosed,absent,absent,absent,absent,absent,absent,absent,absent,absent
 2604.16835v1,absent,absent,absent,absent,absent,absent,absent,absent,absent,absent
@@ -10,11 +10,11 @@ arxiv_id,walk_forward_validation__gold,walk_forward_validation__pred,purged_emba
 2508.15922v1,disclosed,absent,absent,absent,absent,absent,absent,absent,disclosed,absent
 2504.20088v1,absent,absent,absent,absent,absent,absent,absent,absent,absent,absent
 2607.00475v1,disclosed,disclosed,absent,absent,disclosed,disclosed,disclosed,disclosed,disclosed,disclosed
-2510.16066v4,absent,absent,absent,absent,absent,absent,absent,absent,absent,absent
+2510.16066v4,absent,absent,absent,absent,absent,absent,absent,absent,absent,disclosed
 2602.00082v1,absent,absent,absent,absent,ambiguous,disclosed,absent,absent,absent,absent
 2607.20093v1,absent,absent,absent,absent,disclosed,disclosed,disclosed,disclosed,disclosed,absent
 2607.21826v1,disclosed,absent,absent,absent,absent,absent,absent,absent,absent,absent
-2606.30037v1,disclosed,disclosed,absent,absent,absent,disclosed,disclosed,absent,disclosed,absent
+2606.30037v1,disclosed,disclosed,absent,absent,absent,disclosed,disclosed,absent,disclosed,disclosed
 2605.04004v2,disclosed,disclosed,absent,absent,disclosed,disclosed,absent,absent,disclosed,absent
 2510.15993v1,absent,absent,absent,absent,absent,absent,absent,absent,absent,absent
 2607.24410v1,absent,absent,absent,disclosed,absent,absent,absent,absent,absent,disclosed
@@ -31,4 +31,4 @@ arxiv_id,walk_forward_validation__gold,walk_forward_validation__pred,purged_emba
 2603.05917v3,absent,disclosed,absent,absent,disclosed,disclosed,absent,absent,disclosed,disclosed
 2602.07085v3,absent,absent,absent,absent,disclosed,disclosed,absent,absent,absent,absent
 2606.27670v1,absent,absent,absent,absent,disclosed,disclosed,absent,absent,absent,absent
-2602.18572v1,disclosed,absent,absent,absent,ambiguous,absent,disclosed,disclosed,disclosed,absent
+2602.18572v1,disclosed,absent,absent,absent,ambiguous,absent,disclosed,disclosed,disclosed,disclosed

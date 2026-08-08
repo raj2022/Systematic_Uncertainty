@@ -74,6 +74,10 @@ CHECKLIST_PATTERNS = {
         r"out[\s-]?of[\s-]?sample\s+period",
         r"second\s+(window|period|dataset)",
         r"robustness\s+.{0,20}(period|window|sample)",
+        r"\d+[\s-]?folds?\b",
+        r"\d+[\s-]?(%|percent)?\s*step\b",
+        r"(pre|post)[\s-]?covid",
+        r"distinct\s+(historical\s+)?(period|window|year)",
     ],
 }
 
@@ -96,7 +100,20 @@ def fetch_fulltext(arxiv_id: str) -> str | None:
 
 
 def predict(text: str) -> dict:
-    """disclosed if any pattern for that element matches, else absent."""
+    """disclosed if any pattern for that element matches, else absent.
+
+    NOTE: an earlier version of this function cross-credited
+    multi_window_validation whenever walk_forward_validation fired, on
+    the assumption that walk-forward validation always implies testing
+    on multiple distinct windows. False-positive review showed this
+    assumption is wrong: a paper can do genuine walk-forward validation
+    (continuous rolling re-estimation over one long OOS period) without
+    that counting as "multi-window" under this project's definition,
+    which requires distinct, separately-identified historical periods
+    (e.g. pre/post-crisis, several discrete test windows), not a single
+    continuous rolling process. The cross-credit rule was removed. See
+    notes/005 for the full false-positive/false-negative review.
+    """
     preds = {}
     for element, patterns in CHECKLIST_PATTERNS.items():
         hit = any(re.search(p, text, flags=re.IGNORECASE) for p in patterns)
