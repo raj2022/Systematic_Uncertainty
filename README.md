@@ -30,14 +30,30 @@ Hou, Xue, and Zhang's *Replicating Anomalies* and McLean and Pontiff's *Does Aca
 
 | Phase | Milestone | Status |
 |:---:|---|---|
-| 1 | Keyword/phrase baseline detector, scored against a hand-labeled gold set | Gold set pulled (50 papers, `q-fin.ST`, fixed date window) and triaged; hand-labeling in progress |
-| 2 | Classifier, evaluated head-to-head against the Phase 1 baseline | Not started — contingent on Phase 1 |
+| 1 | Keyword/phrase baseline detector, scored against a hand-labeled gold set | **Complete.** Gold set: 50 papers (`q-fin.ST`, fixed date window), hand-labeled, 33 applicable. Baseline scored — see results below. |
+| 2 | Classifier, evaluated head-to-head against the Phase 1 baseline | Not started — next up |
 | 3 | Synthetic ablation test and external replication-failure validation | Not started — contingent on Phase 2 |
 | 4 | Corpus-scale disclosure-gap estimate (stretch) | Not scoped |
 
-Category scope for the corpus pull is currently `q-fin.ST` only. `q-fin.CP`, `q-fin.TR`, and `q-fin.PM` are deferred (see [`ISSUES.md`](ISSUES.md)) until after Phase 1 is scored, so the gold set's composition doesn't shift mid-labeling.
+Category scope for the corpus pull is currently `q-fin.ST` only. `q-fin.CP`, `q-fin.TR`, and `q-fin.PM` are deferred (see [`ISSUES.md`](ISSUES.md)) until later, so the gold set's composition doesn't shift mid-labeling.
 
 Full phase breakdown: [proposal, §6](SYSTEMATIC_UNCERTAINTY_PROPOSAL.md#6-project-phases).
+
+### Phase 1 results
+
+Of the 50 gold-set papers, 17 (34%) were judged not applicable (no empirical/backtested predictive claims — governance frameworks, purely descriptive or theoretical studies). The keyword baseline was scored against the remaining 33 applicable papers:
+
+| Element | Precision | Recall | F1 | n disclosed (gold) |
+|---|---:|---:|---:|---:|
+| Walk-forward validation | 0.857 | 0.462 | 0.600 | 13 |
+| Purged / embargoed CV | 0.000 | 0.000 | n/a (n=1) | 1 |
+| Out-of-sample cost modeling | 0.667 | 1.000 | 0.800 | 8 |
+| Multiple-testing correction | 0.750 | 0.750 | 0.750 | 4 |
+| Multi-window validation | 0.444 | 0.364 | 0.400 | 11 |
+
+A mediocre, uneven baseline, as expected for a first-commitment keyword detector. Its clearest structural limitation — confirmed by manual review of every false positive and false negative — is that keyword matching cannot distinguish a paper *disclosing* something from a paper *stating it was not done*, and struggles to distinguish one validation period described with two dates from genuinely distinct multiple periods. This is the number Phase 2 has to beat, and the specific failure modes found here are the direct motivation for building it. Full investigation: [`notes/004`](notes/004_phase1_baseline_and_cost_modeling_fix.md), [`notes/005`](notes/005_multiwindow_review_and_phase1_final.md).
+
+Separately: among the 33 applicable papers, the **hand-labeled ground truth itself** shows purged/embargoed cross-validation disclosed in only 1 paper (3%) and multiple-testing correction in 4 (12%) — the two rarest disclosures in this sample, consistent with the project's founding hypothesis. See [`notes/003`](notes/003_gold_set_labeling_complete.md) for the full disclosure-rate table and its caveats (small N, single labeler, single category).
 
 ## Getting started
 
@@ -83,6 +99,9 @@ Every labeling decision, rejected attempt, and scope call is recorded in [`notes
 |---|---|
 | [`001`](notes/001_not_applicable_label_state.md) | Added a fourth gold-set label state, `not_applicable`, distinguishing papers with nothing to disclose from papers that omitted a disclosure |
 | [`002`](notes/002_reproducibility_date_window.md) | Pinned the arXiv pull to a fixed submission-date window, since a fixed random seed alone did not make the sample reproducible |
+| [`003`](notes/003_gold_set_labeling_complete.md) | Gold-set labeling complete (50 papers); baseline disclosure rates and caveats |
+| [`004`](notes/004_phase1_baseline_and_cost_modeling_fix.md) | Phase 1 first scoring pass; found and fixed a gold-label inconsistency (slippage-as-cost-modeling) via false-positive review |
+| [`005`](notes/005_multiwindow_review_and_phase1_final.md) | Multi-window false-negative review; a cross-credit rule was tried, found to rest on a false assumption, and reverted; Phase 1 finalized |
 
 ## License
 
