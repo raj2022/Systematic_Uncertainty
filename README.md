@@ -31,8 +31,8 @@ Hou, Xue, and Zhang's *Replicating Anomalies* and McLean and Pontiff's *Does Aca
 | Phase | Milestone | Status |
 |:---:|---|---|
 | 1 | Keyword/phrase baseline detector, scored against a hand-labeled gold set | **Complete.** Gold set: 50 papers (`q-fin.ST`, fixed date window), hand-labeled, 33 applicable. Baseline scored — see results below. |
-| 2 | Classifier, evaluated head-to-head against the Phase 1 baseline | Not started — next up |
-| 3 | Synthetic ablation test and external replication-failure validation | Not started — contingent on Phase 2 |
+| 2 | Classifier, evaluated head-to-head against the Phase 1 baseline | **Complete.** LLM-based extraction classifier beats Phase 1 on every scoreable element — see results below. |
+| 3 | Synthetic ablation test and external replication-failure validation | Not started — next up |
 | 4 | Corpus-scale disclosure-gap estimate (stretch) | Not scoped |
 
 Category scope for the corpus pull is currently `q-fin.ST` only. `q-fin.CP`, `q-fin.TR`, and `q-fin.PM` are deferred (see [`ISSUES.md`](ISSUES.md)) until later, so the gold set's composition doesn't shift mid-labeling.
@@ -54,6 +54,22 @@ Of the 50 gold-set papers, 17 (34%) were judged not applicable (no empirical/bac
 A mediocre, uneven baseline, as expected for a first-commitment keyword detector. Its clearest structural limitation — confirmed by manual review of every false positive and false negative — is that keyword matching cannot distinguish a paper *disclosing* something from a paper *stating it was not done*, and struggles to distinguish one validation period described with two dates from genuinely distinct multiple periods. This is the number Phase 2 has to beat, and the specific failure modes found here are the direct motivation for building it. Full investigation: [`notes/004`](notes/004_phase1_baseline_and_cost_modeling_fix.md), [`notes/005`](notes/005_multiwindow_review_and_phase1_final.md).
 
 Separately: among the 33 applicable papers, the **hand-labeled ground truth itself** shows purged/embargoed cross-validation disclosed in only 1 paper (3%) and multiple-testing correction in 4 (12%) — the two rarest disclosures in this sample, consistent with the project's founding hypothesis. See [`notes/003`](notes/003_gold_set_labeling_complete.md) for the full disclosure-rate table and its caveats (small N, single labeler, single category).
+
+### Phase 2 results
+
+Phase 2 (an LLM prompted with the same five checklist definitions used for hand-labeling, via the Anthropic API) was scored head-to-head against Phase 1 on the same 33 applicable papers:
+
+| Element | Phase 1 F1 | Phase 2 F1 | Winner |
+|---|---:|---:|---|
+| Walk-forward validation | 0.600 | **0.917** | Phase 2 |
+| Purged / embargoed CV | undefined (n=1) | undefined (n=1) | tied — unscoreable at this sample size |
+| Out-of-sample cost modeling | 0.800 | **0.857** | Phase 2 |
+| Multiple-testing correction | 0.750 | **1.000** | Phase 2 (n=4, small) |
+| Multi-window validation | 0.400 | **0.588** | Phase 2 |
+
+Phase 2 beats or ties Phase 1 on every scoreable element, with the largest gains exactly where Phase 1's structural weaknesses were diagnosed: distinguishing a paper *disclosing* something from a paper *stating it was not done*, and distinguishing a single continuous re-estimation process from genuinely distinct, countable validation windows. Full investigation, including two real bugs found and fixed along the way (a response-truncation issue and an overly broad multi-window definition inherited from Phase 1's own false-positive review): [`notes/006`](notes/006_phase2_classifier_and_multiwindow_definition.md).
+
+Purged/embargoed CV remains unscoreable by either method at n=1 — this would need a larger or differently-sampled gold set to evaluate meaningfully at all, not a better detector.
 
 ## Getting started
 
@@ -102,6 +118,7 @@ Every labeling decision, rejected attempt, and scope call is recorded in [`notes
 | [`003`](notes/003_gold_set_labeling_complete.md) | Gold-set labeling complete (50 papers); baseline disclosure rates and caveats |
 | [`004`](notes/004_phase1_baseline_and_cost_modeling_fix.md) | Phase 1 first scoring pass; found and fixed a gold-label inconsistency (slippage-as-cost-modeling) via false-positive review |
 | [`005`](notes/005_multiwindow_review_and_phase1_final.md) | Multi-window false-negative review; a cross-credit rule was tried, found to rest on a false assumption, and reverted; Phase 1 finalized |
+| [`006`](notes/006_phase2_classifier_and_multiwindow_definition.md) | Phase 2 LLM classifier built and scored; beats Phase 1 on every element; found and fixed a truncation bug and an over-broad multi-window definition |
 
 ## License
 
