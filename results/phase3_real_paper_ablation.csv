@@ -1,0 +1,11 @@
+target_element,checked_element,is_target,arxiv_id,phase1_original,phase1_redacted,phase1_changed,phase2_original,phase2_redacted,phase2_changed
+out_of_sample_cost_modeling,walk_forward_validation,False,2606.06823v1,absent,absent,False,absent,absent,False
+out_of_sample_cost_modeling,purged_embargoed_cv,False,2606.06823v1,absent,absent,False,absent,absent,False
+out_of_sample_cost_modeling,out_of_sample_cost_modeling,True,2606.06823v1,disclosed,absent,True,disclosed,absent,True
+out_of_sample_cost_modeling,multiple_testing_correction,False,2606.06823v1,absent,absent,False,absent,absent,False
+out_of_sample_cost_modeling,multi_window_validation,False,2606.06823v1,disclosed,disclosed,False,absent,absent,False
+multiple_testing_correction,walk_forward_validation,False,2607.00475v1,disclosed,disclosed,False,disclosed,disclosed,False
+multiple_testing_correction,purged_embargoed_cv,False,2607.00475v1,absent,absent,False,absent,absent,False
+multiple_testing_correction,out_of_sample_cost_modeling,False,2607.00475v1,disclosed,disclosed,False,disclosed,disclosed,False
+multiple_testing_correction,multiple_testing_correction,True,2607.00475v1,disclosed,absent,True,disclosed,absent,True
+multiple_testing_correction,multi_window_validation,False,2607.00475v1,disclosed,disclosed,False,absent,absent,False

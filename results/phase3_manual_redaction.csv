@@ -1,0 +1,6 @@
+target_element,checked_element,is_target,arxiv_id,phase1_original,phase1_redacted,phase1_changed,phase2_original,phase2_redacted,phase2_changed
+walk_forward_validation,walk_forward_validation,True,2607.25189v1,absent,absent,False,disclosed,disclosed,False
+walk_forward_validation,purged_embargoed_cv,False,2607.25189v1,absent,absent,False,absent,absent,False
+walk_forward_validation,out_of_sample_cost_modeling,False,2607.25189v1,absent,absent,False,absent,absent,False
+walk_forward_validation,multiple_testing_correction,False,2607.25189v1,absent,absent,False,absent,absent,False
+walk_forward_validation,multi_window_validation,False,2607.25189v1,absent,absent,False,absent,absent,False
