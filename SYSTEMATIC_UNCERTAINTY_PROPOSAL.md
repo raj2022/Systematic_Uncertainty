@@ -111,7 +111,6 @@ Not yet started. Same format as `Track_to_Trade/notes/`: question, method, rejec
 - The hand-labeled gold set itself, released alongside the code, since it's a real, reusable contribution independent of the detector's eventual performance.
 - A short technical note after Phase 3 regardless of outcome.
 
-
 ## 11. Timeline
 
 | Phase | Milestone | Status |
@@ -119,7 +118,7 @@ Not yet started. Same format as `Track_to_Trade/notes/`: question, method, rejec
 | 1 | Keyword baseline, scored against a hand-labeled gold set | **Complete.** 50-paper gold set (`q-fin.ST`, fixed date window), hand-labeled; 33/50 applicable. Baseline F1 ranged 0.40-0.80 across elements, weakest on multi-window validation and purged/embargoed CV (n=1, effectively unscoreable at this sample size). See `notes/003`-`005`. |
 | 2 | Classifier, head-to-head against Phase 1 | **Complete.** LLM-extraction classifier (Anthropic API) beats or ties Phase 1 on every scoreable element (F1: walk-forward 0.60→0.92, cost modeling 0.80→0.86, multiple-testing 0.75→1.00 [n=4], multi-window 0.40→0.59). Purged/embargoed CV remains unscoreable at n=1 regardless of method. See `notes/006`. |
 | 3 | Synthetic ablation and external replication-failure check | **Partially complete.** Ablation control (synthetic + real-paper) passed cleanly: detectors respond to actual content, zero spurious changes across all tests. External validation against Hou/Xue/Zhang and McLean/Pontiff was scope-limited and reported as an honest, unmet limitation — this project's arXiv-preprint corpus does not overlap with their classic journal-anomaly literature; a true test would require a second, matched, hand-labeled corpus, set aside as substantial additional scope rather than approximated. See `notes/007`. |
-| 4 | Corpus-scale estimate, stretch | Not scoped |
+| 4 | Corpus-scale estimate, stretch | **Partial.** Required building and validating a new automated applicability screen (0.90 accuracy against the gold set, after three documented prompt iterations). Corpus scan completed on 174/500 raw papers (90 judged applicable) before API budget was exhausted mid-run — reported as a partial, recency-skewed sample with qualified (not corrected) disclosure-rate estimates, not a full-corpus claim. See `notes/008`. |
 
 ## 12. What a 45-minute interview conversation looks like
 

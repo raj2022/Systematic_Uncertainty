@@ -33,7 +33,7 @@ Hou, Xue, and Zhang's *Replicating Anomalies* and McLean and Pontiff's *Does Aca
 | 1 | Keyword/phrase baseline detector, scored against a hand-labeled gold set | **Complete.** Gold set: 50 papers (`q-fin.ST`, fixed date window), hand-labeled, 33 applicable. Baseline scored — see results below. |
 | 2 | Classifier, evaluated head-to-head against the Phase 1 baseline | **Complete.** LLM-based extraction classifier beats Phase 1 on every scoreable element — see results below. |
 | 3 | Synthetic ablation test and external replication-failure validation | **Partially complete.** Synthetic + real-paper ablation passed cleanly (detectors respond to real content, not style/length — zero spurious changes across all tests). External validation against Hou/Xue/Zhang and McLean/Pontiff was scope-limited: no matched corpus exists between this project's arXiv preprints and their classic journal-anomaly literature — reported as a real, unmet limitation, not worked around. See below and [`notes/007`](notes/007_phase3_ablation_and_external_validation.md). |
-| 4 | Corpus-scale disclosure-gap estimate (stretch) | Not scoped |
+| 4 | Corpus-scale disclosure-gap estimate (stretch) | **Partial.** Applicability screening required a new, separately-validated LLM prompt (0.90 accuracy against the gold set, after three documented iterations). Corpus scan completed on 174/500 raw papers (90 judged applicable) before API budget ran out — reported honestly as a partial, recency-skewed sample, not a full-corpus result. See [`notes/008`](notes/008_phase4_applicability_tuning_and_partial_corpus.md). |
 
 Category scope for the corpus pull is currently `q-fin.ST` only. `q-fin.CP`, `q-fin.TR`, and `q-fin.PM` are deferred (see [`ISSUES.md`](ISSUES.md)) until later, so the gold set's composition doesn't shift mid-labeling.
 
@@ -80,6 +80,22 @@ Purged/embargoed CV remains unscoreable by either method at n=1 — this would n
 **External validation** (against Hou/Xue/Zhang, McLean/Pontiff): **scope-limited, and reported honestly as such.** This project's corpus (2025-2026 arXiv preprints) does not overlap with the classic factor-anomaly literature those papers study (older, peer-reviewed, gated journal articles). A true correlation test would require building and hand-labeling a second, matched gold set — set aside as substantial additional scope rather than approximated with a weaker substitute. This project's own disclosure-rate finding (notes/003) is reported as directionally consistent with that literature's general pattern, not statistically correlated with it.
 
 Full writeup, including two ablation attempts that were inconclusive and reported as such rather than smoothed over: [`notes/007`](notes/007_phase3_ablation_and_external_validation.md).
+
+### Phase 4 results (partial)
+
+Phase 4 required a new capability neither Phase 1 nor Phase 2 had needed: automated **applicability screening**, since applicability was previously judged entirely by hand. A validated applicability prompt (0.90 accuracy, 0.938 precision, 0.909 recall against all 50 gold-set papers, after three documented iterations — including one attempt that scored worse despite being conceptually more correct) was used to scan the raw corpus.
+
+The scan completed on **174 of 500** raw-pulled papers (90 judged applicable) before Anthropic API credit ran out mid-run. Rather than treat this as a failed run, it's reported as what it is — a partial, recency-skewed sample (roughly the most recently submitted third of the corpus), still over 2.5x the gold set's applicable-paper count:
+
+| Element | Disclosed | Rate | Validated precision / recall |
+|---|---:|---:|---|
+| Walk-forward validation | 44/90 | 48.9% | 1.000 / 0.846 |
+| Purged / embargoed CV | 3/90 | 3.3% | unvalidated (n=1 in gold set) |
+| Out-of-sample cost modeling | 14/90 | 15.6% | 1.000 / 0.750 |
+| Multiple-testing correction | 14/90 | 15.6% | 1.000 / 1.000 (n=4, small) |
+| Multi-window validation | 24/90 | 26.7% | 0.833 / 0.455 |
+
+These are qualified estimates, not corrected population statistics — high-recall elements are closer to a reliable floor, low-recall elements (multi-window especially) likely undercount the true rate. The relative ordering matches the smaller gold set's own findings (notes/003), though this isn't independent confirmation since both use the same underlying classifier. Full writeup and caveats: [`notes/008`](notes/008_phase4_applicability_tuning_and_partial_corpus.md).
 
 ## Getting started
 
@@ -130,6 +146,7 @@ Every labeling decision, rejected attempt, and scope call is recorded in [`notes
 | [`005`](notes/005_multiwindow_review_and_phase1_final.md) | Multi-window false-negative review; a cross-credit rule was tried, found to rest on a false assumption, and reverted; Phase 1 finalized |
 | [`006`](notes/006_phase2_classifier_and_multiwindow_definition.md) | Phase 2 LLM classifier built and scored; beats Phase 1 on every element; found and fixed a truncation bug and an over-broad multi-window definition |
 | [`007`](notes/007_phase3_ablation_and_external_validation.md) | Synthetic + real-paper ablation (clean, zero spurious changes); external validation scope-limited and reported as an unmet limitation, not worked around |
+| [`008`](notes/008_phase4_applicability_tuning_and_partial_corpus.md) | Applicability screen validated after three iterations (best-scoring prompt vs. most-correct prompt, a real tension, stated honestly); corpus scan partial (174/500) due to API budget, reported as such |
 
 ## License
 
