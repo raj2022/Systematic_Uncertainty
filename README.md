@@ -32,7 +32,7 @@ Hou, Xue, and Zhang's *Replicating Anomalies* and McLean and Pontiff's *Does Aca
 |:---:|---|---|
 | 1 | Keyword/phrase baseline detector, scored against a hand-labeled gold set | **Complete.** Gold set: 50 papers (`q-fin.ST`, fixed date window), hand-labeled, 33 applicable. Baseline scored — see results below. |
 | 2 | Classifier, evaluated head-to-head against the Phase 1 baseline | **Complete.** LLM-based extraction classifier beats Phase 1 on every scoreable element — see results below. |
-| 3 | Synthetic ablation test and external replication-failure validation | Not started — next up |
+| 3 | Synthetic ablation test and external replication-failure validation | **Partially complete.** Synthetic + real-paper ablation passed cleanly (detectors respond to real content, not style/length — zero spurious changes across all tests). External validation against Hou/Xue/Zhang and McLean/Pontiff was scope-limited: no matched corpus exists between this project's arXiv preprints and their classic journal-anomaly literature — reported as a real, unmet limitation, not worked around. See below and [`notes/007`](notes/007_phase3_ablation_and_external_validation.md). |
 | 4 | Corpus-scale disclosure-gap estimate (stretch) | Not scoped |
 
 Category scope for the corpus pull is currently `q-fin.ST` only. `q-fin.CP`, `q-fin.TR`, and `q-fin.PM` are deferred (see [`ISSUES.md`](ISSUES.md)) until later, so the gold set's composition doesn't shift mid-labeling.
@@ -70,6 +70,16 @@ Phase 2 (an LLM prompted with the same five checklist definitions used for hand-
 Phase 2 beats or ties Phase 1 on every scoreable element, with the largest gains exactly where Phase 1's structural weaknesses were diagnosed: distinguishing a paper *disclosing* something from a paper *stating it was not done*, and distinguishing a single continuous re-estimation process from genuinely distinct, countable validation windows. Full investigation, including two real bugs found and fixed along the way (a response-truncation issue and an overly broad multi-window definition inherited from Phase 1's own false-positive review): [`notes/006`](notes/006_phase2_classifier_and_multiwindow_definition.md).
 
 Purged/embargoed CV remains unscoreable by either method at n=1 — this would need a larger or differently-sampled gold set to evaluate meaningfully at all, not a better detector.
+
+### Phase 3 results
+
+**Synthetic ablation** (fully controlled paragraphs, one disclosure added per variant): 4/5 elements correctly flipped `absent → disclosed` for both detectors; Phase 1 missed multi-window validation (consistent with its known regex gap), Phase 2 caught it. **Zero spurious changes** to any non-target element across every test — the core finding: both detectors respond to actual content, not incidental style or length.
+
+**Real-paper ablation** (disclosing sentences removed from real gold-set text): clean 2/2 correct flips where a single redaction point existed (cost modeling, multiple-testing correction), zero spurious changes. For walk-forward and multi-window, single-sentence redaction on real papers proved insufficient on its own — real papers often restate their methodology in more than one place, unlike the synthetic paragraphs, which is a limitation of the ablation method on real prose, not new evidence about either detector's quality.
+
+**External validation** (against Hou/Xue/Zhang, McLean/Pontiff): **scope-limited, and reported honestly as such.** This project's corpus (2025-2026 arXiv preprints) does not overlap with the classic factor-anomaly literature those papers study (older, peer-reviewed, gated journal articles). A true correlation test would require building and hand-labeling a second, matched gold set — set aside as substantial additional scope rather than approximated with a weaker substitute. This project's own disclosure-rate finding (notes/003) is reported as directionally consistent with that literature's general pattern, not statistically correlated with it.
+
+Full writeup, including two ablation attempts that were inconclusive and reported as such rather than smoothed over: [`notes/007`](notes/007_phase3_ablation_and_external_validation.md).
 
 ## Getting started
 
@@ -119,6 +129,7 @@ Every labeling decision, rejected attempt, and scope call is recorded in [`notes
 | [`004`](notes/004_phase1_baseline_and_cost_modeling_fix.md) | Phase 1 first scoring pass; found and fixed a gold-label inconsistency (slippage-as-cost-modeling) via false-positive review |
 | [`005`](notes/005_multiwindow_review_and_phase1_final.md) | Multi-window false-negative review; a cross-credit rule was tried, found to rest on a false assumption, and reverted; Phase 1 finalized |
 | [`006`](notes/006_phase2_classifier_and_multiwindow_definition.md) | Phase 2 LLM classifier built and scored; beats Phase 1 on every element; found and fixed a truncation bug and an over-broad multi-window definition |
+| [`007`](notes/007_phase3_ablation_and_external_validation.md) | Synthetic + real-paper ablation (clean, zero spurious changes); external validation scope-limited and reported as an unmet limitation, not worked around |
 
 ## License
 
