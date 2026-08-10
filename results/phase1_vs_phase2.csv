@@ -1,0 +1,6 @@
+element,precision_phase1,recall_phase1,f1_phase1,precision_phase2,recall_phase2,f1_phase2
+walk_forward_validation,0.857,0.462,0.6,1.0,0.846,0.917
+purged_embargoed_cv,0.0,0.0,,0.0,0.0,
+out_of_sample_cost_modeling,0.667,1.0,0.8,1.0,0.75,0.857
+multiple_testing_correction,0.75,0.75,0.75,1.0,1.0,1.0
+multi_window_validation,0.444,0.364,0.4,0.833,0.455,0.588

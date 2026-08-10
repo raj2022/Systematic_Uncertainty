@@ -57,3 +57,17 @@ sampling *from* the pulled pool, not what that pool contains. Fixed by
 pinning an explicit submission-date window. See
 `notes/002_reproducibility_date_window.md`. Still open: the default
 end date will need a deliberate, logged update eventually.
+
+## Open (added after Phase 1)
+
+### Fine-tuned transformer for Phase 2 -- deferred
+Considered building both an LLM-extraction classifier and a fine-tuned
+transformer for Phase 2, to compare head-to-head. Deferred: a
+fine-tuned transformer needs far more labeled examples than the
+current 33-50 applicable papers to learn 5 separate classification
+tasks without just memorizing the training set, and pursuing both in
+parallel splits effort before either is known to beat Phase 1. Revisit
+only if LLM-extraction clearly beats Phase 1 (worth a second comparison
+point) or clearly doesn't (worth trying a different approach) -- and
+if pursued, needs its own labeled-data expansion plan, not an
+incidental side effect of "we have a bit more time."

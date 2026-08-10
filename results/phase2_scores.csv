@@ -1,0 +1,6 @@
+element,n_scored,n_ambiguous_excluded,tp,fp,fn,tn,precision,recall,f1
+walk_forward_validation,33,0,11,0,2,20,1.0,0.846,0.917
+purged_embargoed_cv,33,0,0,1,1,31,0.0,0.0,
+out_of_sample_cost_modeling,31,2,6,0,2,23,1.0,0.75,0.857
+multiple_testing_correction,33,0,4,0,0,29,1.0,1.0,1.0
+multi_window_validation,33,0,5,1,6,21,0.833,0.455,0.588
